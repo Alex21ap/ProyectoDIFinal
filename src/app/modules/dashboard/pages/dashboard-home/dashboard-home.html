@@ -1,0 +1,68 @@
+<div class="row mb-4">
+  <div class="col-12">
+    <h2>Panel de Control</h2>
+    <p class="text-muted">Bienvenido al Sistema de Gestión Educativa. Aquí tienes un resumen de la institución.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-4 mb-4">
+    <div class="card border-primary shadow-sm h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="text-primary text-uppercase fw-bold">Cursos Activos</h6>
+            <h2 class="mb-0">{{ totalCourses }}</h2>
+          </div>
+          <div class="bg-primary text-white rounded-circle p-3">
+            <i class="bi bi-book fs-3"></i>
+          </div>
+        </div>
+        <a routerLink="/dashboard/courses" class="btn btn-sm btn-outline-primary mt-3 w-100">Gestionar Cursos</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 mb-4">
+    <div class="card border-success shadow-sm h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="text-success text-uppercase fw-bold">Usuarios Totales</h6>
+            <h2 class="mb-0">{{ totalUsers }}</h2>
+          </div>
+          <div class="bg-success text-white rounded-circle p-3">
+            <i class="bi bi-people fs-3"></i>
+          </div>
+        </div>
+        <a routerLink="/dashboard/users" class="btn btn-sm btn-outline-success mt-3 w-100">Gestionar Usuarios</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4 mb-4">
+    <div class="card border-warning shadow-sm h-100">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h6 class="text-warning text-uppercase fw-bold">Reportes</h6>
+            <h2 class="mb-0">PDF</h2>
+          </div>
+          <div class="bg-warning text-white rounded-circle p-3">
+            <i class="bi bi-file-earmark-bar-graph fs-3"></i>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline-warning mt-3 w-100" (click)="generarReporte()">Descargar Resumen</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-2">
+  <div class="col-12">
+    <div class="alert alert-info border-0 shadow-sm">
+      <i class="bi bi-info-circle-fill me-2"></i>
+      <strong>Nota del sistema:</strong> Todas las acciones realizadas quedan registradas bajo tu usuario con token JWT activo.
+    </div>
+  </div>
+</div>

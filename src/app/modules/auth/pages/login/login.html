@@ -1,0 +1,43 @@
+<div class="container d-flex justify-content-center align-items-center vh-100">
+  <div class="card shadow-sm" style="width: 100%; max-width: 400px;">
+    <div class="card-body p-4">
+      <h3 class="text-center mb-4">Iniciar Sesión</h3>
+      <p class="text-muted text-center small">Sistema de Gestión Educativa</p>
+
+      <form (submit)="onLogin()">
+        <div class="mb-3">
+          <label class="form-label">Usuario</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-person"></i></span>
+            <input 
+              type="text" 
+              class="form-control" 
+              name="username" 
+              [(ngModel)]="credentials.username" 
+              required 
+              placeholder="Ej: felipe123">
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Contraseña</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+            <input 
+              type="password" 
+              class="form-control" 
+              name="password" 
+              [(ngModel)]="credentials.password" 
+              required 
+              placeholder="********">
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mt-3" [disabled]="isLoading">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          {{ isLoading ? 'Ingresando...' : 'Ingresar' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

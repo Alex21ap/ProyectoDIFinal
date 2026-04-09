@@ -1,0 +1,131 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h2><i class="bi bi-people-fill me-2"></i>Gestión de Usuarios</h2>
+    <p class="text-muted small">Panel administrativo para control de acceso y roles.</p>
+  </div>
+  <button class="btn btn-success shadow-sm" data-bs-toggle="modal" data-bs-target="#userModal" (click)="prepareNewUser()">
+    <i class="bi bi-person-plus me-2"></i>Nuevo Usuario
+  </button>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    
+    <div *ngIf="isLoading" class="text-center my-5">
+      <div class="spinner-border text-danger" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2 text-muted">Sincronizando con el servidor...</p>
+    </div>
+
+    <div class="table-responsive" *ngIf="!isLoading">
+      <table class="table table-hover align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th style="width: 80px;">ID</th>
+            <th>Usuario</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="users.length === 0">
+            <td colspan="5" class="text-center text-muted py-5">
+              <i class="bi bi-info-circle me-2"></i>No hay usuarios registrados actualmente.
+            </td>
+          </tr>
+
+          <tr *ngFor="let user of users">
+            <td><span class="text-muted">#{{ user.id }}</span></td>
+            <td><strong>{{ user.username }}</strong></td>
+            <td>{{ user.email }}</td>
+            <td>
+              <span class="badge" 
+                    [ngClass]="{
+                      'bg-danger': user.role === 'ADMIN', 
+                      'bg-warning text-dark': user.role === 'PROFESOR',
+                      'bg-primary': user.role === 'ESTUDIANTE'
+                    }">
+                {{ user.role }}
+              </span>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-primary me-2" 
+                      data-bs-toggle="modal" 
+                      data-bs-target="#userModal" 
+                      (click)="editUser(user)"
+                      title="Editar usuario">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" 
+                      (click)="deleteUser(user.id!)"
+                      title="Eliminar usuario">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="userModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header" [ngClass]="isEditing ? 'bg-primary text-white' : 'bg-success text-white'">
+        <h5 class="modal-title">
+          <i class="bi" [ngClass]="isEditing ? 'bi-pencil-square' : 'bi-person-plus-fill'"></i>
+          {{ isEditing ? 'Editar Usuario' : 'Registrar Nuevo Usuario' }}
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      
+      <form (submit)="saveUser($event)">
+        <div class="modal-body p-4">
+          <div class="mb-3" *ngIf="isEditing">
+            <label class="form-label text-muted small">ID de Usuario</label>
+            <input type="text" [value]="selectedUser.id" class="form-control bg-light" readonly>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Nombre de Usuario</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" name="username" [(ngModel)]="selectedUser.username" class="form-control" placeholder="Ej: alicia_dev" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Correo Electrónico</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" name="email" [(ngModel)]="selectedUser.email" class="form-control" placeholder="nombre@ejemplo.com" required>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">Rol del Sistema</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+              <select name="role" [(ngModel)]="selectedUser.role" class="form-select" required>
+                <option value="ADMIN">Administrador</option>
+                <option value="PROFESOR">Profesor</option>
+                <option value="ESTUDIANTE">Estudiante</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer bg-light">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeUserModal">Cancelar</button>
+          <button type="submit" class="btn" [ngClass]="isEditing ? 'btn-primary' : 'btn-success'" [disabled]="isLoading">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ isEditing ? 'Actualizar Usuario' : 'Crear Usuario' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

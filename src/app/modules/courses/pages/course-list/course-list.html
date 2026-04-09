@@ -1,0 +1,94 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2>Gestión de Cursos</h2>
+  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#courseModal" (click)="prepareNewCourse()">
+    <i class="bi bi-plus-circle me-2"></i>Nuevo Curso
+  </button>
+</div>
+
+<div class="card shadow-sm">
+  <div class="card-body">
+    
+    <div *ngIf="isLoading" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-2 text-muted">Conectando con la academia...</p>
+    </div>
+
+    <div class="table-responsive" *ngIf="!isLoading">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>ID</th>
+            <th>Nombre del Curso</th>
+            <th>Instructor</th>
+            <th>Duración</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="courses.length === 0">
+            <td colspan="5" class="text-center text-muted py-4">
+              No hay cursos registrados actualmente en la academia.
+            </td>
+          </tr>
+
+          <tr *ngFor="let course of courses">
+            <td>{{ course.id }}</td>
+            <td>
+              <strong>{{ course.nombre }}</strong><br>
+              <small class="text-muted">{{ course.descripcion }}</small>
+            </td>
+            <td>{{ course.instructor }}</td>
+            <td><span class="badge bg-info text-dark">{{ course.duracion }}</span></td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#courseModal" (click)="editCourse(course)">
+                <i class="bi bi-pencil"></i>
+              </button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteCourse(course.id)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="courseModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">{{ isEditing ? 'Editar Curso' : 'Agregar Nuevo Curso' }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form (submit)="saveCourse($event)">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Nombre del Curso</label>
+            <input type="text" name="nombre" [(ngModel)]="selectedCourse.nombre" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Instructor</label>
+            <input type="text" name="instructor" [(ngModel)]="selectedCourse.instructor" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Duración</label>
+            <input type="text" name="duracion" [(ngModel)]="selectedCourse.duracion" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea name="descripcion" [(ngModel)]="selectedCourse.descripcion" class="form-control" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="closeModal">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="isLoading">
+            {{ isEditing ? 'Actualizar' : 'Guardar' }} Curso
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

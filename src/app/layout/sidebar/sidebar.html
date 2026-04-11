@@ -1,23 +1,42 @@
-<div class="bg-dark text-white vh-100" style="width: 250px;">
-  <div class="p-3">
-    <h4 class="text-center">EduGestion</h4>
-    <hr>
-    <ul class="nav flex-column">
-      <li class="nav-item">
-        <a class="nav-link text-white" routerLink="/dashboard/home">
+<div class="bg-dark text-white sidebar-container shadow" style="width: 250px;">
+  <div class="p-3 d-flex flex-column h-100">
+    <div class="text-center py-3">
+      <h4 class="mb-0 fw-bold">
+        <i class="bi bi-mortarboard-fill me-2 text-primary"></i>EduGestion
+      </h4>
+      <small class="text-muted text-uppercase small" style="font-size: 0.7rem;">Sistema Académico</small>
+    </div>
+    
+    <hr class="text-secondary">
+    
+    <ul class="nav flex-column mb-auto">
+      <li class="nav-item mb-1">
+        <a class="nav-link text-white py-3 px-3 rounded sidebar-link" 
+           routerLink="/dashboard/home" 
+           routerLinkActive="active-link">
           <i class="bi bi-speedometer2 me-2"></i> Inicio
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" routerLink="/dashboard/courses">
+      
+      <li class="nav-item mb-1">
+        <a class="nav-link text-white py-3 px-3 rounded sidebar-link" 
+           routerLink="/dashboard/courses" 
+           routerLinkActive="active-link">
           <i class="bi bi-book me-2"></i> Cursos
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link text-white" routerLink="/dashboard/users">
+      
+      <li class="nav-item mb-1" *ngIf="userRole === 'ADMIN'">
+        <a class="nav-link text-white py-3 px-3 rounded sidebar-link" 
+           routerLink="/dashboard/users" 
+           routerLinkActive="active-link">
           <i class="bi bi-people me-2"></i> Usuarios
         </a>
       </li>
     </ul>
+
+    <div class="text-center mt-3">
+      <small class="text-muted" style="font-size: 0.7rem;">v1.0.2</small>
+    </div>
   </div>
 </div>

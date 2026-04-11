@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -14,6 +14,7 @@ import { User } from '../../../../core/models/user.model';
 })
 export class UserList implements OnInit {
   private usersService = inject(Users);
+  private cd = inject(ChangeDetectorRef);
 
   users: User[] = [];
   isLoading = true;
@@ -36,16 +37,21 @@ export class UserList implements OnInit {
    */
   loadUsers(): void {
     this.isLoading = true;
-    this.usersService.getUsers().subscribe({
-      next: (data) => {
-        this.users = data;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Error al cargar usuarios', err);
-        this.isLoading = false;
-      }
-    });
+
+    setTimeout(() => {
+      this.usersService.getUsers().subscribe({
+        next: (data) => {
+          this.users = data;
+          this.isLoading = false;
+          this.cd.detectChanges();
+        },
+        error: (err) => {
+          console.error('Error al cargar usuarios', err);
+          this.isLoading = false;
+          this.cd.detectChanges();
+        }
+      });
+    }, 1000);
   }
 
   prepareNewUser(): void {
@@ -72,18 +78,26 @@ export class UserList implements OnInit {
           if (index !== -1) {
             this.users[index] = updatedUser;
           }
+          this.cd.detectChanges();
           this.closeModalAndReset('Usuario actualizado correctamente');
         },
-        error: () => alert('Error al actualizar el usuario en el servidor')
+        error: () => {
+          alert('Error al actualizar el usuario en el servidor');
+          this.cd.detectChanges();
+        }
       });
     } else {
       // --- CREAR USUARIO (POST) ---
       this.usersService.createUser(this.selectedUser).subscribe({
         next: (newUser) => {
           this.users.push(newUser);
+          this.cd.detectChanges();
           this.closeModalAndReset('Usuario registrado con éxito');
         },
-        error: () => alert('Error al registrar el usuario en el servidor')
+        error: () => {
+          alert('Error al registrar el usuario en el servidor');
+          this.cd.detectChanges();
+        }
       });
     }
   }
@@ -104,11 +118,12 @@ export class UserList implements OnInit {
     if (confirm('¿Estás seguro de que deseas eliminar este usuario?')) {
       this.usersService.deleteUser(id).subscribe({
         next: () => {
-          // Eliminamos de la lista local solo después de que el server confirme
           this.users = this.users.filter(u => u.id !== id);
+          this.cd.detectChanges();
         },
         error: () => {
           this.users = this.users.filter(u => u.id !== id);
+          this.cd.detectChanges();
           console.warn('Eliminado localmente debido a error de conexión.');
         }
       });

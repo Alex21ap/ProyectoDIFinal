@@ -1,0 +1,10 @@
+# Dependencias
+node_modules/
+
+# Seguridad (Vital para no subir tus claves reales)
+.env
+
+# Logs y Temporales
+npm-debug.log*
+.DS_Store
+Thumbs.db

@@ -1,41 +1,99 @@
 <div class="row mb-4">
   <div class="col-12">
-    <h2>Panel de Control</h2>
-    <p class="text-muted">Bienvenido al Sistema de Gestión Educativa. Aquí tienes un resumen de la institución.</p>
+    <h2>{{ userRole === 'ESTUDIANTE' ? 'Mi Panel de Aprendizaje' : 'Panel de Control' }}</h2>
+    <p class="text-muted">
+      {{ userRole === 'ESTUDIANTE' 
+          ? 'Revisa tus inscripciones y progreso.' 
+          : 'Bienvenido al Sistema de Gestión Educativa. Aquí tienes un resumen de la institución.' }}
+    </p>
   </div>
 </div>
 
-<div class="row">
+<div *ngIf="userRole === 'ESTUDIANTE'" class="alert alert-info border-0 shadow-sm mb-4">
+  🎓 <strong>¡Hola!</strong> Tienes acceso a todos los cursos disponibles. ¡Inscríbete en uno para comenzar!
+</div>
+
+<div class="row mb-4" *ngIf="userRole === 'ESTUDIANTE'">
+  <div class="col-md-4 mb-3">
+    <div class="card bg-primary text-white shadow-sm btn-card" (click)="switchView('inscritos')" style="cursor: pointer;">
+      <div class="card-body">
+        <h5>Mis Inscripciones <i class="bi bi-chevron-right ms-2"></i></h5>
+        <p class="display-6 mb-0">{{ misInscripcionesCount }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-8 mb-3" *ngIf="userRole === 'ESTUDIANTE'">
+  <div class="card border-0 shadow-sm h-100 bg-white">
+    <div class="card-body">
+      <h6 class="text-muted small text-uppercase fw-bold">Tu Progreso Académico</h6>
+      <div class="d-flex align-items-center mt-3">
+        <div class="progress flex-grow-1" style="height: 10px;">
+          <div class="progress-bar bg-primary progress-bar-striped progress-bar-animated" 
+               role="progressbar" 
+               [style.width]="(misInscripcionesCount / totalCourses * 100) + '%'">
+          </div>
+        </div>
+        <span class="ms-3 fw-bold text-primary">{{ (misInscripcionesCount / totalCourses * 100) | number:'1.0-0' }}%</span>
+      </div>
+      <p class="small text-muted mt-2">Te has inscrito en {{ misInscripcionesCount }} de los {{ totalCourses }} cursos disponibles.</p>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4 animate__animated animate__fadeIn" *ngIf="viewMode === 'inscritos' && userRole === 'ESTUDIANTE'">
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <h4 class="mb-0">Listado de Mis Cursos</h4>
+      <button class="btn btn-sm btn-light" (click)="viewMode = 'none'">Cerrar</button>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Curso</th>
+            <th>Instructor</th>
+            <th>Duración</th>
+            <th class="text-center">Acción</th> </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let course of filteredCourses">
+            <td>{{ course.nombre }}</td>
+            <td>{{ course.instructor }}</td>
+            <td><span class="badge bg-info text-dark">{{ course.duracion }}</span></td>
+            <td class="text-center">
+              <button class="btn btn-outline-danger btn-sm" (click)="cancelarInscripcion(course.id)">
+                <i class="bi bi-trash me-1"></i> Cancelar
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="filteredCourses.length === 0">
+            <td colspan="4" class="text-center py-4 text-muted">Aún no te has inscrito en ningún curso.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-4" *ngIf="userRole !== 'ESTUDIANTE'">
   <div class="col-md-4 mb-4">
     <div class="card border-primary shadow-sm h-100">
       <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h6 class="text-primary text-uppercase fw-bold">Cursos Activos</h6>
-            <h2 class="mb-0">{{ totalCourses }}</h2>
-          </div>
-          <div class="bg-primary text-white rounded-circle p-3">
-            <i class="bi bi-book fs-3"></i>
-          </div>
-        </div>
-        <a routerLink="/dashboard/courses" class="btn btn-sm btn-outline-primary mt-3 w-100">Gestionar Cursos</a>
+        <h6 class="text-primary fw-bold text-uppercase small">Cursos en Sistema</h6>
+        <h2 class="mb-0">{{ totalCourses }}</h2>
+        <a routerLink="/dashboard/courses" class="btn btn-sm btn-outline-primary mt-3 w-100">Ir a Cursos</a>
       </div>
     </div>
   </div>
 
-  <div class="col-md-4 mb-4">
+  <div class="col-md-4 mb-4" *ngIf="userRole === 'ADMIN'">
     <div class="card border-success shadow-sm h-100">
       <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h6 class="text-success text-uppercase fw-bold">Usuarios Totales</h6>
-            <h2 class="mb-0">{{ totalUsers }}</h2>
-          </div>
-          <div class="bg-success text-white rounded-circle p-3">
-            <i class="bi bi-people fs-3"></i>
-          </div>
-        </div>
-        <a routerLink="/dashboard/users" class="btn btn-sm btn-outline-success mt-3 w-100">Gestionar Usuarios</a>
+        <h6 class="text-success fw-bold text-uppercase small">Usuarios Totales</h6>
+        <h2 class="mb-0">{{ totalUsers }}</h2>
+        <a routerLink="/dashboard/users" class="btn btn-sm btn-outline-success mt-3 w-100">Ir a Usuarios</a>
       </div>
     </div>
   </div>
@@ -43,26 +101,10 @@
   <div class="col-md-4 mb-4">
     <div class="card border-warning shadow-sm h-100">
       <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h6 class="text-warning text-uppercase fw-bold">Reportes</h6>
-            <h2 class="mb-0">PDF</h2>
-          </div>
-          <div class="bg-warning text-white rounded-circle p-3">
-            <i class="bi bi-file-earmark-bar-graph fs-3"></i>
-          </div>
-        </div>
-        <button class="btn btn-sm btn-outline-warning mt-3 w-100" (click)="generarReporte()">Descargar Resumen</button>
+        <h6 class="text-warning fw-bold text-uppercase small">Reportes Académicos</h6>
+        <h2 class="mb-0">PDF</h2>
+        <button class="btn btn-sm btn-outline-warning mt-3 w-100" (click)="generarReporte()">Descargar</button>
       </div>
-    </div>
-  </div>
-</div>
-
-<div class="row mt-2">
-  <div class="col-12">
-    <div class="alert alert-info border-0 shadow-sm">
-      <i class="bi bi-info-circle-fill me-2"></i>
-      <strong>Nota del sistema:</strong> Todas las acciones realizadas quedan registradas bajo tu usuario con token JWT activo.
     </div>
   </div>
 </div>

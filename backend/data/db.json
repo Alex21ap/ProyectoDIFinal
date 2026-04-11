@@ -1,0 +1,62 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "email": "admin@academia.com",
+      "role": "ADMIN",
+      "password": "admin123"
+    },
+    {
+      "id": 2,
+      "username": "profesor",
+      "email": "profesor@academia.com",
+      "role": "PROFESOR",
+      "password": "prof123"
+    },
+    {
+      "id": 3,
+      "username": "estudiante",
+      "email": "estudiante@academia.com",
+      "role": "ESTUDIANTE",
+      "password": "estu123"
+    },
+    {
+      "id": 4,
+      "username": "Roberto Cruz",
+      "email": "rcruz@academia.com",
+      "role": "PROFESOR",
+      "password": "rcruz123"
+    }
+  ],
+  "courses": [
+    {
+      "id": 1,
+      "nombre": "Angular Básico",
+      "descripcion": "Fundamentos de componentes, rutas y servicios.",
+      "duracion": "6 semanas",
+      "instructor": "Juan Pérez"
+    },
+    {
+      "id": 2,
+      "nombre": "TypeScript Aplicado",
+      "descripcion": "Tipado, interfaces y clases para aplicaciones web.",
+      "duracion": "4 semanas",
+      "instructor": "María López"
+    },
+    {
+      "id": 3,
+      "nombre": "Consumo de APIs REST",
+      "descripcion": "Peticiones HTTP, JWT e integración frontend-backend.",
+      "duracion": "5 semanas",
+      "instructor": "Carlos Rojas"
+    },
+    {
+      "id": 4,
+      "nombre": "Matematicas",
+      "descripcion": "Operaciones básicas",
+      "duracion": "2 semanas",
+      "instructor": "Roberto Cruz"
+    }
+  ]
+}

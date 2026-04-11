@@ -1,0 +1,17 @@
+{
+  "name": "proyecto-di-final-backend",
+  "version": "1.0.0",
+  "description": "Backend simple con Express y JWT para el proyecto final de Desarrollo de Interfaces.",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

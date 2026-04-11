@@ -1,6 +1,13 @@
 <div class="d-flex justify-content-between align-items-center mb-4">
-  <h2>Gestión de Cursos</h2>
-  <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#courseModal" (click)="prepareNewCourse()">
+  <div>
+    <h2 class="mb-1">{{ userRole === 'ESTUDIANTE' ? 'Catálogo de Cursos' : 'Gestión de Cursos' }}</h2>
+    <p class="text-muted mb-0">
+      {{ userRole === 'ESTUDIANTE' 
+         ? 'Explora nuestra oferta académica e inscríbete en los cursos de tu interés.' 
+         : 'Panel de administración para crear, editar y gestionar la oferta educativa.' }}
+    </p>
+  </div>
+  <button *ngIf="userRole !== 'ESTUDIANTE'" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#courseModal" (click)="prepareNewCourse()">
     <i class="bi bi-plus-circle me-2"></i>Nuevo Curso
   </button>
 </div>
@@ -19,11 +26,11 @@
       <table class="table table-hover align-middle">
         <thead class="table-light">
           <tr>
-            <th>ID</th>
+            <th *ngIf="userRole !== 'ESTUDIANTE'">ID</th>
             <th>Nombre del Curso</th>
             <th>Instructor</th>
             <th>Duración</th>
-            <th class="text-center">Acciones</th>
+            <th class="text-center">{{ userRole === 'ESTUDIANTE' ? 'Inscripción' : 'Acciones' }}</th>
           </tr>
         </thead>
         <tbody>
@@ -34,7 +41,7 @@
           </tr>
 
           <tr *ngFor="let course of courses">
-            <td>{{ course.id }}</td>
+            <td *ngIf="userRole !== 'ESTUDIANTE'">{{ course.id }}</td>
             <td>
               <strong>{{ course.nombre }}</strong><br>
               <small class="text-muted">{{ course.descripcion }}</small>
@@ -42,12 +49,22 @@
             <td>{{ course.instructor }}</td>
             <td><span class="badge bg-info text-dark">{{ course.duracion }}</span></td>
             <td class="text-center">
-              <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#courseModal" (click)="editCourse(course)">
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteCourse(course.id)">
-                <i class="bi bi-trash"></i>
-              </button>
+              <div *ngIf="userRole !== 'ESTUDIANTE'">
+                <button class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#courseModal" (click)="editCourse(course)">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="deleteCourse(course.id)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+              <div *ngIf="userRole === 'ESTUDIANTE'">
+                <button 
+                  [disabled]="estaInscrito(course.id)" 
+                  [class]="estaInscrito(course.id) ? 'btn btn-success' : 'btn btn-primary'"
+                  (click)="inscribir(course)">
+                  {{ estaInscrito(course.id) ? 'Ya inscrito' : 'Inscribirme' }}
+                </button>
+              </div>
             </td>
           </tr>
         </tbody>
@@ -70,8 +87,21 @@
             <input type="text" name="nombre" [(ngModel)]="selectedCourse.nombre" class="form-control" required>
           </div>
           <div class="mb-3">
-            <label class="form-label">Instructor</label>
-            <input type="text" name="instructor" [(ngModel)]="selectedCourse.instructor" class="form-control" required>
+            <label for="instructor" class="form-label">Instructor</label>
+            <select 
+              class="form-select" 
+              id="instructor" 
+              name="instructor" 
+              [(ngModel)]="selectedCourse.instructor" 
+              required>
+              
+              <option value="" disabled selected>Selecciona un profesor...</option>
+              
+              <option *ngFor="let profe of profesores" [value]="profe.username">
+                {{ profe.username }}
+              </option>
+              
+            </select>
           </div>
           <div class="mb-3">
             <label class="form-label">Duración</label>

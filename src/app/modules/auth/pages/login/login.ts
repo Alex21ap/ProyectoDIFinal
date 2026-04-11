@@ -24,25 +24,26 @@ export class Login {
   isLoading = false;
 
   onLogin() {
-    /*this.isLoading = true;
+    this.isLoading = true;
 
-    // 4. Usamos los datos vinculados
     this.authService.login(this.credentials.username, this.credentials.password).subscribe({
       next: (response) => {
         console.log('Login exitoso', response);
         this.isLoading = false;
         
-        // Redirigir según el rol si fuera necesario
-        this.router.navigate(['/dashboard']);
+        // Guardamos el token para que los interceptores lo usen
+        localStorage.setItem('token', response.token);
+        
+        // Guardamos el objeto usuario completo (incluye el rol)
+        localStorage.setItem('user', JSON.stringify(response.user));
+
+        this.router.navigate(['/dashboard/home']);
       },
       error: (err) => {
         this.isLoading = false;
         alert('Error en las credenciales. Revisa tu usuario o contraseña.');
         console.error(err);
       }
-    });*/
-    localStorage.setItem('token', 'token-de-prueba');
-    localStorage.setItem('user_role', 'ADMIN');
-    this.router.navigate(['/dashboard']);
+    });
   }
 }

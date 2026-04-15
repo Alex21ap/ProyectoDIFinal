@@ -14,7 +14,7 @@ Antes de comenzar, asegúrate de tener instalado:
 Primero, clona el proyecto en tu máquina local y entra en la carpeta:
 
 ```bash
-git clone [https://github.com/Alex21ap/ProyectoDIFinal](https://github.com/Alex21ap/ProyectoDIFinal)
+git clone https://github.com/Alex21ap/ProyectoDIFinal
 cd ProyectoDIFinal
 
 ## Configuración del Backend
